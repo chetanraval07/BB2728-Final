@@ -3,7 +3,7 @@ pipeline {
 
     stages {
 
-        stage('PULL STAGE') {
+        stage('PULL STAGE 1') {
             steps {
                git 'https://github.com/chetanraval07/BB2728-Final.git'
             }
