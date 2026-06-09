@@ -5,7 +5,7 @@ pipeline {
 
         stage('PULL') {
             steps {
-               git 'https://github.com/chetanraval07/jenkins-final26.git'
+               git 'https://github.com/chetanraval07/BB2728-Final.git'
             }
         }
 
