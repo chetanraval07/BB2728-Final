@@ -5,7 +5,7 @@ pipeline {
 
         stage('PULL STAGE 2') {
             steps {
-               git 'https://github.com/chetanraval07/BB2728-Final.git'
+                git 'https://github.com/chetanraval07/BB2728-Final.git'
             }
         }
 
@@ -29,17 +29,30 @@ pipeline {
 
         stage('DOCKER-PUSH') {
             steps {
-                sh '''
-                docker push shivansh7310/easy-frontend:latest
-                docker push shivansh7310/easy-backend:latest
-                '''
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )
+                ]) {
+                    sh '''
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+                    docker push shivansh7310/easy-frontend:latest
+                    docker push shivansh7310/easy-backend:latest
+
+                    docker logout
+                    '''
+                }
             }
-	}
-            stage('DOCKER-CLEAN') {
+        }
+
+        stage('DOCKER-CLEAN') {
             steps {
                 sh '''
-                docker rmi -f shivansh7310/easy-frontend:latest
-                docker rmi -f shivansh7310/easy-backend:latest
+                docker rmi -f shivansh7310/easy-frontend:latest || true
+                docker rmi -f shivansh7310/easy-backend:latest || true
                 '''
             }
         }
