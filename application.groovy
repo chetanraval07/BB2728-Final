@@ -58,9 +58,17 @@ pipeline {
         }
 
         stage('DEPLOY') {
-            steps {
-                sh 'kubectl apply -f simple-deploy/'
-            }
+           steps {
+               sh '''
+        aws eks update-kubeconfig \
+          --region eu-central-1 \
+          --name my-cluster
+
+        kubectl get nodes
+
+        kubectl apply -f simple-deploy/ '''
+           }
         }
     }
+    
 }
